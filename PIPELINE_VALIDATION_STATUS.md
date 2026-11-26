@@ -16,7 +16,7 @@
 
 | 測試 | 狀態 | 結果 |
 |---|---|---|
-| N1 原 v2.3.11 schema positive candidate/complete | FAIL (reproduction) | Ajv 8.20.0 拒絕兩份合法形狀 manifest，確認 `unevaluatedProperties` placement 缺陷。 |
+| N1 原 v2.3.11 schema positive candidate/complete | FAIL (reproduction) | Ajv 8.20.0 以 `#/allOf/1/unevaluatedProperties` 拒絕兩份合法形狀 manifest。可重現：`node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md`；該命令 exit 0 表示重現腳本完成，fixture `valid:false` 是被測舊 schema 的失敗結果。 |
 | v2.3.12 schema fixture harness | PASS | Ajv 8.20.0 `ajv/dist/2020`; ajv-formats 3.0.1; Node.js v24.22.3。命令見下。58 fixtures、0 failures、exit 0。 |
 | `$schema/$ref/allOf/unevaluatedProperties` semantic check | PASS (schema compile via Ajv) | `allOf` common refs compile; positive candidate/complete accepted; unknown root property rejected. |
 | Full JSON schema files | PASS | All 11 Draft 2020-12 schemas compiled by Ajv harness and exercised by positive/negative synthetic fixtures. |
@@ -24,8 +24,9 @@
 Reproduce in PowerShell, with Ajv runtime in temporary directory (not part of repository):
 
 ```powershell
-node scripts/generate_v2_3_12_fixtures.cjs
 $env:NODE_PATH='C:\Users\user\Documents\Codex\2026-11-26\battle-cats-github-repository-https-github\work\_ajv2020_runtime\node_modules'
+node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md
+node scripts/generate_v2_3_12_fixtures.cjs
 node scripts/validate_v2_3_12_schemas.cjs
 ```
 

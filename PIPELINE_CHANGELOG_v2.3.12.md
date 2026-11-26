@@ -24,7 +24,7 @@ node scripts/generate_v2_3_12_fixtures.cjs
 node scripts/validate_v2_3_12_schemas.cjs
 ```
 
-首輪依 Claude 指摘重現 v2.3.11 schema 問題：合法 candidate 與 complete 都被 `unevaluatedProperties:false` 放在 allOf child 的 schema 拒絕。修正版最終 58 fixtures（兩個正向 manifest、六個 manifest 負向、其餘 schema 正負向）由 Ajv 實跑，0 mismatch、exit 0；結果記錄於 `PIPELINE_VALIDATION_STATUS.md`。這只是 schema 對 fixtures 驗證，不是 Parser/ACL/Windows 發布實作測試。
+首輪依 Claude 指摘重現 v2.3.11 schema 問題：合法 candidate 與 complete 都被 `unevaluatedProperties:false` 放在 allOf child 的 schema 拒絕。可重現命令為 `node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md`。修正版最終 58 fixtures（兩個正向 manifest、六個 manifest 負向、其餘 schema 正負向）由 Ajv 實跑，0 mismatch、exit 0；結果記錄於 `PIPELINE_VALIDATION_STATUS.md`。這只是 schema 對 fixtures 驗證，不是 Parser/ACL/Windows 發布實作測試。
 
 ## 修訂前後
 
