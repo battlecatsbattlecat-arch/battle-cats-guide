@@ -1,43 +1,52 @@
-# PIPELINE_VALIDATION_STATUS.md — 驗證狀態清冊
+# PIPELINE_VALIDATION_STATUS.md — v2.3.11 驗證狀態
 
-狀態標籤：`PASS` 僅代表實際執行並通過；`FAIL` 實際執行但失敗；`NOT RUN` 未執行；`BLOCKED` 因環境／權限無法執行。文字審查不等於測試。
+狀態標籤：`PASS` 僅代表確實執行並通過；`FAIL` 是實際失敗；`NOT RUN` 未執行；`BLOCKED` 無法執行。文字推理及文件審查不代表實作通過。
 
-## 歷史已執行觀察（來自既有交接紀錄；不代表 v2.3.10 測試）
+## v2.3.11 文件修訂範圍
 
-- Task 001 歷史紀錄曾確認來源檔雜湊自洽、TSV 行／欄觀察、scheme JSON 基本結構、Public repo 唯讀可達。
-- 舊版 `test_sample_validation.ps1` 曾對舊版 `sample_30.json` 通過 19/19 斷言；該結果不驗證 v2.3.9/v2.3.10。
-- 既有交接紀錄指出歷史工作目錄當時沒有 Git；本次接手另以乾淨 clone 取得 `codex/pipeline-handoff`，clone 時 HEAD 為 `a1717bb`。這只證明工作分支可讀，不是 parser 或安全測試。
+- 已修訂規格、逐項 review、open issues、驗證清冊及總 changelog。
+- 沒有實作 Parser／publisher/verifier，沒有修改 `main`、source 或發布解析產物。
+- 文件草案等待 Claude 獨立審查，未凍結。
 
-## v2.3.10 文件修訂（人工規格檢視；非程式測試）
+## 文件檢查
 
-- 已新增 `PIPELINE_SPEC_v2.3.10.md`，並新增 `PIPELINE_CHANGELOG_v2.3.10.md`、`PIPELINE_CODEX_REVIEW.md`，更新 `PIPELINE_CHANGELOG.md`，更新本清冊與 `PIPELINE_OPEN_ISSUES.md`。
-- 規格仍為草案，待獨立審查，未凍結。
-- 本次修改未寫 Parser、未操作 source、未修改 main。
-
-## 文件檢查（非程式測試）
-
-- `git diff --cached --check`：PASS，未回報空白錯誤或 conflict marker。此項僅是 diff 格式檢查，不代表規格行為或 Parser 測試通過。
-## 測試清單 — 全部 NOT RUN
-
-| 項目 | 狀態 | 原因／下一步 |
+| 檢查 | 狀態 | 範圍 |
 |---|---|---|
-| build candidate→complete→published 狀態機 | NOT RUN | 尚無 publisher 實作；先實作後做失敗注入 |
-| 首次發布、兩個 publisher 並行、generation/tie-break | NOT RUN | 尚無 publisher；需 Windows 整合測試 |
-| 同卷 replace、讀者持有 handle、replace 失敗復原 | NOT RUN | 目標平台／檔案系統尚未驗證 |
-| Crash-durability / flush/write-through | NOT RUN | 不宣稱已具 crash durability |
-| 指標 schema、路徑 containment、Manifest/file SHA reader 驗證 | NOT RUN | 尚無 reader/publisher implementation |
-| `raw_line_base64` LF/CRLF/NONE roundtrip | NOT RUN | 尚無 Parser/測試 fixtures |
-| 裸 CR、invalid UTF-8、blank、BOM-only、空檔及 mixed EOL roundtrip | NOT RUN | 尚無 Parser/測試 fixtures |
-| TSV trailing/adjacent empty fields、異常欄數 roundtrip | NOT RUN | 尚無 Parser/測試 fixtures |
-| Unicode 數字 placeholder 負面 regex fixtures | NOT RUN | 尚無測試程式；需測 Arabic-Indic、Devanagari、Fullwidth、mixed |
-| 物理行所有邊界統計等式 | NOT RUN | 尚無結構分析器與 fixtures |
-| `CreateDirectoryW` 父目錄／183 race／reparse/path containment | NOT RUN | 尚無 P/Invoke 程式，需在 Windows 測試 |
-| 多重診斷收集及 PowerShell `-File` exit code | NOT RUN | 尚無 verifier 實作 |
-| Public repo 完整歷史掃描 | NOT RUN | 未執行完整歷史 blob/tree 掃描 |
-| Branch Protection / Rulesets / CODEOWNERS / required CI 驗證 | NOT RUN | GitHub repository settings 尚未取得可驗證證據 |
-| 固定來源 Commit LICENSE 及再散布權利 | NOT RUN | 法律／上游授權狀態仍未確認 |
-| 來源錨定、正式 step 0 與 `-Finalize` | NOT RUN | 尚未執行 |
+| 分支及起始工作樹檢查 | PASS | 確認 local branch 為 `codex/pipeline-handoff`；其上含 v2.3.10 提交，初始工作樹乾淨（v2.3.11 新文件除外）。 |
+| 逐項文件交叉檢視 | PASS | 人工核對 L/B/F/X 對照及版本文件之間的聲明；這是文件審閱，不是 parser 測試。 |
+| `git diff --cached --check` | PASS | 已對本次 staged 文檔差異執行，無 whitespace error 或 conflict marker。僅格式檢查。 |
+| JSON Schema parser／validator | NOT RUN | 尚未以實際 Draft 2020-12 validator 驗證範例/Schema。 |
 
-## P0 與未解項目
+## 功能／整合測試 — 全部 NOT RUN
 
-Public Repository 歷史安全、Branch Protection/Rulesets、CODEOWNERS/allowlist/CI 與固定上游 LICENSE／遊戲資料再散布權利仍為阻斷項目。上游遊戲語意 G-01 至 G-10 亦未驗證。細節見 `PIPELINE_OPEN_ISSUES.md`。
+| 測試 | 狀態 | 尚需執行內容 |
+|---|---|---|
+| Empty bytes、BOM-only、line1 blank + line2 合法-looking header、全空行 | NOT RUN | 檢查 file-level diagnostics、header line 1 規則與行統計。 |
+| BOM 後第二個 U+FEFF | NOT RUN | 驗證只剝除初始 BOM，其餘 bytes 留在 payload。 |
+| LF、CRLF、無尾端 EOL、裸 CR、invalid UTF-8 | NOT RUN | 驗證 raw bytes replay、reason priority、offset 與 byte equations。 |
+| TSV 連續空欄、尾端空欄、多尾空欄、TAB-only、少欄／多欄 | NOT RUN | 驗證 token 數、原始 bytes 與 EOL 完整 roundtrip。 |
+| ASCII placeholder regex Unicode 負面集 | NOT RUN | Arabic-Indic、Devanagari、Fullwidth 及混合數字。 |
+| 每行唯一 primary class/reason 與 rejected 優先序 | NOT RUN | 建立同一行多種錯誤的合成 fixtures。 |
+| Line/BOM/payload/EOL byte 對帳 | NOT RUN | 每個 physical-line fixture 比較三個規格恆等式。 |
+| Sequence ledger 原子 no-replace 與並行配置 | NOT RUN | 多程序競爭，確認唯一序號、無倒退與無重用。 |
+| Sequence allocation crash window | NOT RUN | ledger rename 前後、counter write 前後、lease/event/staging 建立時終止程序。 |
+| Counter corruption/recovery | NOT RUN | 損毀 bytes 保存、ledger 證據重建、證據不足 fail-closed。 |
+| Lock timeout、巢狀順序與 GC lease | NOT RUN | OS lock 壓力、反向鎖死防止、live lease skip、orphan recovery。 |
+| Stale 高序號先發布、低序號後到 | NOT RUN | 確認低序號失敗且不修改 sealed build/pointer。 |
+| Lifecycle failure records/events | NOT RUN | 每個 write/rename/ACL/receipt crash window 與恢復。 |
+| 首次 parsed_current 建立及並行 publisher | NOT RUN | 首發 no-replace race、lock timeout、generation compare。 |
+| Atomic replace、讀者持有 handle、替換錯誤 | NOT RUN | 目標 Windows/filesystem 原子可見性、retry 與 pointer reread。 |
+| Read-side manifest、inventory、artifact hash 驗證 | NOT RUN | missing/extra file、錯誤 hash、路徑穿越皆拒絕。 |
+| parsed_current 損毀／缺失人工恢復 | NOT RUN | 保存證據、operator plan、原子恢復且 reader 停止條件。 |
+| CreateDirectoryW 父路徑／183 race／錯誤 3／reparse | NOT RUN | Windows P/Invoke、重試上限與 path containment。 |
+| 多重錯誤收集及 PowerShell `-File` exit mapping | NOT RUN | 錯誤並存時診斷完整、優先序 `13 > 11 > 12 > 10 > 14 > 0`。 |
+| Public Repository 完整歷史安全掃描 | NOT RUN | 需完整歷史 tree/blob 掃描並留存可稽核結果。 |
+| Publish allowlist 驗證 | NOT RUN | 獨立檢查所有追蹤檔是否屬 default-deny allowlist。 |
+| CI / pre-push allowlist 與歷史掃描 workflow 驗證 | NOT RUN | 獨立執行 CI/pre-push gate，驗證負面 fixtures。 |
+| Branch Protection / Rulesets / CODEOWNERS / required CI | NOT RUN | GitHub 設定與實際必要狀態檢查未取得證據。 |
+| 上游 LICENSE 與遊戲／第三方資料散布權利 | NOT RUN | 尚未完成權利確認。 |
+| Formal source anchoring 與 step 0 | NOT RUN | 尚未執行固定來源比對及 formal baseline。 |
+
+## P0 與停止條件
+
+Public Repo 完整歷史掃描、Branch Protection/Rulesets、CODEOWNERS/allowlist/CI、上游 LICENSE 與資料再散布權利維持 OPEN。未解除 P0，不得公開 source 或解析產物。本文件提交後等待 Claude 獨立審查；不進入 Parser 實作。

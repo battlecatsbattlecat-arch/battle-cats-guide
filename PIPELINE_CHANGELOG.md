@@ -1,6 +1,6 @@
 # PIPELINE_CHANGELOG.md — 版本修訂歷史與獨立審查意見彙整
 
-本文件記錄 Battle Cats 資料管線從 Task 001 起至今（v2.3.10）的完整演進與審查脈絡，供接手 AI 追蹤每個設計決策的由來。
+本文件記錄 Battle Cats 資料管線從 Task 001 起至今（v2.3.11）的版本演進與審查脈絡，供接手 AI 追蹤每個設計決策的由來。
 
 ---
 
@@ -23,16 +23,19 @@
 | **v2.3.8** | 2026-11-26 | 新增第五類物理行 `blank_row`、五類物理行全存 1-based `physical_line`、修正位元組切割先於逐行嚴格 UTF-8 解碼之順序衝突、補齊空白 CRLF `byte_offset`。 |
 | **v2.3.9** | 2026-11-26 |改用 Win32 `CreateDirectoryW` 排他建立 `attempt` 目錄、統一 `attempt_id` 與目錄名稱（`attempt-<seq>-<uuid_v4>`）、修正 `rights_class` 為 6 種、修正 ASCII `strict_int` 正則 `^(0\|-?[1-9][0-9]*)$`、新增 `builds/<build_id>/` + `parsed_current.json` 原子發布與明定 `source/checksums.json` 實體位置。 |
 | **v2.3.10** | 2026-11-26 | 草案修訂：定義 build candidate/complete 與 indicator published 狀態、build sequence/並行發布/原子替換/讀取驗證、raw payload Base64/TSV roundtrip、CreateDirectoryW 父目錄競爭、統計邊界、ASCII placeholder regex、多重診斷與 exit code。詳見 `PIPELINE_CHANGELOG_v2.3.10.md`；待獨立審查，未凍結。 |
+| **v2.3.11** | 2026-11-26 | 回應 Claude v2.3.10 獨立審查：完善物理行/byte 對帳、sequence allocation ledger 與 crash recovery、build lifecycle/failure/seal/receipt、每 build anomalies、七類 JSON Schema、exit code 邊界、CreateDirectoryW 父層錯誤與競爭、pointer 人工復原及完整 publication gates。逐項對照見 `PIPELINE_CODEX_REVIEW.md`；修訂摘要見 `PIPELINE_CHANGELOG_v2.3.11.md`。草案待複審，未凍結；P0 未解除，實作與功能測試 NOT RUN。 |
 
 ---
 
 ## 二、v2.3.8 → v2.3.9 修訂對照
 
-## 三、v2.3.10 修訂摘要
+## 三、v2.3.10 修訂摘要（歷史）
 
-詳細內容見 `PIPELINE_CHANGELOG_v2.3.10.md`。v2.3.10 仍為草案，待獨立審查，尚未凍結。P0 Public Repository 歷史／防護及授權阻斷保持未解；規格文字修訂不代表實作測試通過。
+## 四、v2.3.10 → v2.3.11 修訂摘要
 
-## 四、v2.3.9 歷史審查紀錄
+詳細內容見 `PIPELINE_CHANGELOG_v2.3.11.md`；Claude 每項意見與先前審查問題的對照見 `PIPELINE_CODEX_REVIEW.md`。v2.3.11 是規格修訂草案，等待 Claude 獨立複審，尚未凍結。P0 Public Repository 歷史／防護及授權阻斷保持未解；規格文字修訂不代表實作或測試通過。v2.3.10 歷史修訂摘要見該版本文件。
+
+## 五、v2.3.9 歷史審查紀錄
 
 ### Claude 對 v2.3.8 審查之主要發現與處理
 1. **P1-2（實質問題）：`attempt` 目錄的建立證明不成立**
@@ -48,4 +51,4 @@
    - **v2.3.9 明定其實體位於 `source/checksums.json`**，納入本地 `source/` 10 檔唯讀防護與集合檢查，排除於 9 檔上游快照身分之外。
 
 ### v2.3.9 完成時的待複審狀態
-- **v2.3.9 複審紀錄（歷史）**：v2.3.9 完成時尚待最終複審；後續審查意見見 `PIPELINE_CODEX_REVIEW.md`，目前 v2.3.10 仍待獨立審查。
+- **v2.3.9 複審紀錄（歷史）**：v2.3.9 完成時尚待最終複審；後續審查意見見 `PIPELINE_CODEX_REVIEW.md`，目前 v2.3.11 仍待獨立審查。
