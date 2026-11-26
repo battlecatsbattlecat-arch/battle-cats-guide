@@ -1,6 +1,6 @@
 # PIPELINE_CHANGELOG.md — 版本修訂歷史與獨立審查意見彙整
 
-本文件記錄 Battle Cats 資料管線從 Task 001 起至今（v2.3.9）的完整演進與審查脈絡，供接手 AI 追蹤每個設計決策的由來。
+本文件記錄 Battle Cats 資料管線從 Task 001 起至今（v2.3.10）的完整演進與審查脈絡，供接手 AI 追蹤每個設計決策的由來。
 
 ---
 
@@ -21,11 +21,18 @@
 | **v2.3.6** | 2026-11-25 | `-Init`/`-Anchor`/`-Finalize` 全程 OS 獨占鎖（`FileShare.None`）、`attempt` 併發原子建立與超 9999 擴位、區分 `catstat_id_count(s)`/`catstat_rows_in_id(k,s)`/`catstat_field_occurrences(k,s)`、定義裸 CR（`0x0D`）觸發 `blocking`。 |
 | **v2.3.7** | 2026-11-25 | 新增第四類物理行 `rejected_row`、改用 128-bit UUID v4 `attempt_id`、恢復五項互斥物理行統計公式。 |
 | **v2.3.8** | 2026-11-26 | 新增第五類物理行 `blank_row`、五類物理行全存 1-based `physical_line`、修正位元組切割先於逐行嚴格 UTF-8 解碼之順序衝突、補齊空白 CRLF `byte_offset`。 |
-| **v2.3.9** | 2026-11-26 | **現行最新規格**：改用 Win32 `CreateDirectoryW` 排他建立 `attempt` 目錄、統一 `attempt_id` 與目錄名稱（`attempt-<seq>-<uuid_v4>`）、修正 `rights_class` 為 6 種、修正 ASCII `strict_int` 正則 `^(0\|-?[1-9][0-9]*)$`、新增 `builds/<build_id>/` + `parsed_current.json` 原子發布與明定 `source/checksums.json` 實體位置。 |
+| **v2.3.9** | 2026-11-26 |改用 Win32 `CreateDirectoryW` 排他建立 `attempt` 目錄、統一 `attempt_id` 與目錄名稱（`attempt-<seq>-<uuid_v4>`）、修正 `rights_class` 為 6 種、修正 ASCII `strict_int` 正則 `^(0\|-?[1-9][0-9]*)$`、新增 `builds/<build_id>/` + `parsed_current.json` 原子發布與明定 `source/checksums.json` 實體位置。 |
+| **v2.3.10** | 2026-11-26 | 草案修訂：定義 build candidate/complete 與 indicator published 狀態、build sequence/並行發布/原子替換/讀取驗證、raw payload Base64/TSV roundtrip、CreateDirectoryW 父目錄競爭、統計邊界、ASCII placeholder regex、多重診斷與 exit code。詳見 `PIPELINE_CHANGELOG_v2.3.10.md`；待獨立審查，未凍結。 |
 
 ---
 
-## 二、v2.3.8 → v2.3.9 修訂對照與最新審查紀錄
+## 二、v2.3.8 → v2.3.9 修訂對照
+
+## 三、v2.3.10 修訂摘要
+
+詳細內容見 `PIPELINE_CHANGELOG_v2.3.10.md`。v2.3.10 仍為草案，待獨立審查，尚未凍結。P0 Public Repository 歷史／防護及授權阻斷保持未解；規格文字修訂不代表實作測試通過。
+
+## 四、v2.3.9 歷史審查紀錄
 
 ### Claude 對 v2.3.8 審查之主要發現與處理
 1. **P1-2（實質問題）：`attempt` 目錄的建立證明不成立**
@@ -40,5 +47,5 @@
 5. **`checksums.json` 實體儲存位置未明定**
    - **v2.3.9 明定其實體位於 `source/checksums.json`**，納入本地 `source/` 10 檔唯讀防護與集合檢查，排除於 9 檔上游快照身分之外。
 
-### 本次交接後仍應注意（尚未經外部複審）
-- **v2.3.9 本身尚未經 Claude 複審**：已於 v2.3.9 完成後停止自行修訂規格，交由 Codex 接手進行最終檢查與技術實作收尾。
+### v2.3.9 完成時的待複審狀態
+- **v2.3.9 複審紀錄（歷史）**：v2.3.9 完成時尚待最終複審；後續審查意見見 `PIPELINE_CODEX_REVIEW.md`，目前 v2.3.10 仍待獨立審查。
