@@ -306,3 +306,5 @@ Major technology decisions must be recorded in DECISION_LOG.md after approval.
 ⸻
 
 Architecture principle: Clear boundaries, traceable data, consistent contracts, and incremental development.
+
+Recommendation algorithms and other extensible features should be designed as independent modules with stable interfaces. The core application should not depend on a specific algorithm implementation. Modules should be replaceable or upgradeable without requiring changes to unrelated core systems.
