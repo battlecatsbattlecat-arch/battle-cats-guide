@@ -414,12 +414,13 @@ Each named definition below is a separate schema, uses additionalProperties=fals
       },
       "FailureRecord":{
         "$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,
-        "required":["schema_version","build_id","build_sequence","failed_at_utc","stage","error_id","diagnostics","staging_path","diagnostic_path"],
+        "required":["schema_version","build_id","build_sequence","allocation_uuid","failed_at_utc","stage","error_id","diagnostics","staging_path","diagnostic_path","original_os_error"],
         "properties":{
-          "schema_version":{"const":"1.0"},"build_id":{"type":"string"},"build_sequence":{"type":"integer","minimum":1},
+          "schema_version":{"const":"1.0"},"build_id":{"type":"string"},"build_sequence":{"type":"integer","minimum":1},"allocation_uuid":{"type":"string","format":"uuid"},
           "failed_at_utc":{"type":"string","format":"date-time","pattern":"Z$"},"stage":{"type":"string"},"error_id":{"type":"string"},
           "diagnostics":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["message_code","os_code"],"properties":{"message_code":{"type":"string"},"os_code":{"type":["integer","null"]}}}},
-          "staging_path":{"type":["string","null"]},"diagnostic_path":{"type":"string"}
+          "staging_path":{"type":["string","null"]},"diagnostic_path":{"type":"string"},
+          "original_os_error":{"oneOf":[{"type":"null"},{"type":"object","additionalProperties":false,"required":["api","code","message_code"],"properties":{"api":{"enum":["Win32","HRESULT","other"]},"code":{"type":["integer","null"]},"message_code":{"type":"string"}}}]}
         }
       },
       "ParsedCurrent":{
