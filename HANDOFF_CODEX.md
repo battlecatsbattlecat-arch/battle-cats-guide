@@ -3,11 +3,11 @@
 - **交接日期**：2026-11-26（Asia/Taipei, UTC+8）
 - **交接狀態**：規格已修訂至 **v2.3.9**（**尚未正式凍結**，待最終技術確認後始可凍結）
 - **目標專案**：`https://github.com/battlecatsbattlecat-arch/battle-cats-guide`（目前為 **Public** Repository，預設分支 `main`）
-- **目前環境限制**：本機環境未安裝 `git` 執行檔，未載入 GitHub MCP 寫入工具，因此本次交接文件僅產生於本機 `handoff/` 目錄，**尚未寫入 GitHub**。
+- **Antigravity 當時環境限制**：Antigravity 工作環境未安裝 `git` 執行檔，亦未成功載入 GitHub MCP 寫入工具；因此文件最初僅產生於本機 `handoff/` 目錄。**後續已由使用者透過 GitHub Web UI 上傳至 `codex/pipeline-handoff` 分支，並由 ChatGPT GitHub 連線逐一讀取確認。**
 
 ---
 
-## 一、交接檔案清單（均位於本機 `handoff/` 目錄）
+## 一、交接檔案清單（已提交至 GitHub 分支 `codex/pipeline-handoff`）
 
 1. `HANDOFF_CODEX.md` — 本交接總覽、進度、分工、限制與 Codex 接手步驟。
 2. `PIPELINE_SPEC_v2.3.9.md` — **v2.3.9 完整自足技術規格**（涵蓋全部核心規則、狀態機、OS 獨占鎖、`CreateDirectoryW`、五類物理行、逐位元組回放、ASCII `strict_int`、`catstat ↔ tcat` 關聯、公開／私有邊界與授權分類）。
