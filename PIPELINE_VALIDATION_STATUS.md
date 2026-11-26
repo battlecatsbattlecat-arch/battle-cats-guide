@@ -1,52 +1,71 @@
-# PIPELINE_VALIDATION_STATUS.md — v2.3.11 驗證狀態
+# PIPELINE_VALIDATION_STATUS — v2.3.12
 
-狀態標籤：`PASS` 僅代表確實執行並通過；`FAIL` 是實際失敗；`NOT RUN` 未執行；`BLOCKED` 無法執行。文字推理及文件審查不代表實作通過。
+`PASS` 僅表示指定命令實際成功；文件 review 記為 AUTHOR SELF-REVIEW。Parser、source、production artifacts 未執行/修改。本版未凍結。
 
-## v2.3.11 文件修訂範圍
+## 基準與文件審查
 
-- 已修訂規格、逐項 review、open issues、驗證清冊及總 changelog。
-- 沒有實作 Parser／publisher/verifier，沒有修改 `main`、source 或發布解析產物。
-- 文件草案等待 Claude 獨立審查，未凍結。
-
-## 文件檢查
-
-| 檢查 | 狀態 | 範圍 |
+| 檢查 | 狀態 | 記錄 |
 |---|---|---|
-| 分支及起始工作樹檢查 | PASS | 確認 local branch 為 `codex/pipeline-handoff`；其上含 v2.3.10 提交，初始工作樹乾淨（v2.3.11 新文件除外）。 |
-| 逐項文件交叉檢視 | PASS | 人工核對 L/B/F/X 對照及版本文件之間的聲明；這是文件審閱，不是 parser 測試。 |
-| `git diff --cached --check` | PASS | 已對本次 staged 文檔差異執行，無 whitespace error 或 conflict marker。僅格式檢查。 |
-| JSON Schema parser／validator | NOT RUN | 尚未以實際 Draft 2020-12 validator 驗證範例/Schema。 |
+| Git branch | PASS | `codex/pipeline-handoff` |
+| 開工時最新遠端 HEAD / tree | PASS | GitHub API branch HEAD `e8b14750dba9eab490c75913e402b398e7b71309`; tree 等同本地基準內容。 |
+| Source TSV 探查 | PASS | 在工作樹檔案清單查找 `.tsv`/上游 source 未發現來源 bytes；不據此宣稱 header。 |
+| Claude ID crosswalk 自我檢視 | AUTHOR SELF-REVIEW | `PIPELINE_CODEX_REVIEW.md`; 不是獨立審查。 |
+| v2.3.10/11 safety rule disposition | AUTHOR SELF-REVIEW | 8 項保留/明確化見 review §7。 |
 
-## 功能／整合測試 — 全部 NOT RUN
+## Draft 2020-12 JSON Schema fixture validation
 
-| 測試 | 狀態 | 尚需執行內容 |
+| 測試 | 狀態 | 結果 |
 |---|---|---|
-| Empty bytes、BOM-only、line1 blank + line2 合法-looking header、全空行 | NOT RUN | 檢查 file-level diagnostics、header line 1 規則與行統計。 |
-| BOM 後第二個 U+FEFF | NOT RUN | 驗證只剝除初始 BOM，其餘 bytes 留在 payload。 |
-| LF、CRLF、無尾端 EOL、裸 CR、invalid UTF-8 | NOT RUN | 驗證 raw bytes replay、reason priority、offset 與 byte equations。 |
-| TSV 連續空欄、尾端空欄、多尾空欄、TAB-only、少欄／多欄 | NOT RUN | 驗證 token 數、原始 bytes 與 EOL 完整 roundtrip。 |
-| ASCII placeholder regex Unicode 負面集 | NOT RUN | Arabic-Indic、Devanagari、Fullwidth 及混合數字。 |
-| 每行唯一 primary class/reason 與 rejected 優先序 | NOT RUN | 建立同一行多種錯誤的合成 fixtures。 |
-| Line/BOM/payload/EOL byte 對帳 | NOT RUN | 每個 physical-line fixture 比較三個規格恆等式。 |
-| Sequence ledger 原子 no-replace 與並行配置 | NOT RUN | 多程序競爭，確認唯一序號、無倒退與無重用。 |
-| Sequence allocation crash window | NOT RUN | ledger rename 前後、counter write 前後、lease/event/staging 建立時終止程序。 |
-| Counter corruption/recovery | NOT RUN | 損毀 bytes 保存、ledger 證據重建、證據不足 fail-closed。 |
-| Lock timeout、巢狀順序與 GC lease | NOT RUN | OS lock 壓力、反向鎖死防止、live lease skip、orphan recovery。 |
-| Stale 高序號先發布、低序號後到 | NOT RUN | 確認低序號失敗且不修改 sealed build/pointer。 |
-| Lifecycle failure records/events | NOT RUN | 每個 write/rename/ACL/receipt crash window 與恢復。 |
-| 首次 parsed_current 建立及並行 publisher | NOT RUN | 首發 no-replace race、lock timeout、generation compare。 |
-| Atomic replace、讀者持有 handle、替換錯誤 | NOT RUN | 目標 Windows/filesystem 原子可見性、retry 與 pointer reread。 |
-| Read-side manifest、inventory、artifact hash 驗證 | NOT RUN | missing/extra file、錯誤 hash、路徑穿越皆拒絕。 |
-| parsed_current 損毀／缺失人工恢復 | NOT RUN | 保存證據、operator plan、原子恢復且 reader 停止條件。 |
-| CreateDirectoryW 父路徑／183 race／錯誤 3／reparse | NOT RUN | Windows P/Invoke、重試上限與 path containment。 |
-| 多重錯誤收集及 PowerShell `-File` exit mapping | NOT RUN | 錯誤並存時診斷完整、優先序 `13 > 11 > 12 > 10 > 14 > 0`。 |
-| Public Repository 完整歷史安全掃描 | NOT RUN | 需完整歷史 tree/blob 掃描並留存可稽核結果。 |
-| Publish allowlist 驗證 | NOT RUN | 獨立檢查所有追蹤檔是否屬 default-deny allowlist。 |
-| CI / pre-push allowlist 與歷史掃描 workflow 驗證 | NOT RUN | 獨立執行 CI/pre-push gate，驗證負面 fixtures。 |
-| Branch Protection / Rulesets / CODEOWNERS / required CI | NOT RUN | GitHub 設定與實際必要狀態檢查未取得證據。 |
-| 上游 LICENSE 與遊戲／第三方資料散布權利 | NOT RUN | 尚未完成權利確認。 |
-| Formal source anchoring 與 step 0 | NOT RUN | 尚未執行固定來源比對及 formal baseline。 |
+| N1 原 v2.3.11 schema positive candidate/complete | FAIL (reproduction) | Ajv 8.20.0 拒絕兩份合法形狀 manifest，確認 `unevaluatedProperties` placement 缺陷。 |
+| v2.3.12 schema fixture harness | PASS | Ajv 8.20.0 `ajv/dist/2020`; ajv-formats 3.0.1; Node.js v24.22.3。命令見下。58 fixtures、0 failures、exit 0。 |
+| `$schema/$ref/allOf/unevaluatedProperties` semantic check | PASS (schema compile via Ajv) | `allOf` common refs compile; positive candidate/complete accepted; unknown root property rejected. |
+| Full JSON schema files | PASS | All 11 Draft 2020-12 schemas compiled by Ajv harness and exercised by positive/negative synthetic fixtures. |
 
-## P0 與停止條件
+Reproduce in PowerShell, with Ajv runtime in temporary directory (not part of repository):
 
-Public Repo 完整歷史掃描、Branch Protection/Rulesets、CODEOWNERS/allowlist/CI、上游 LICENSE 與資料再散布權利維持 OPEN。未解除 P0，不得公開 source 或解析產物。本文件提交後等待 Claude 獨立審查；不進入 Parser 實作。
+```powershell
+node scripts/generate_v2_3_12_fixtures.cjs
+$env:NODE_PATH='C:\Users\user\Documents\Codex\2026-11-26\battle-cats-github-repository-https-github\work\_ajv2020_runtime\node_modules'
+node scripts/validate_v2_3_12_schemas.cjs
+```
+
+Expected test meaning is fixture validity agreement; this does not assert business semantics or implementation correctness. Ajv is Draft 2020-12 implementation and `ajv-formats` registers date-time/UUID formats.
+
+## Schema fixture suites
+
+| Suite | 狀態 | Scope |
+|---|---|---|
+| Manifest positive candidate + complete | PASS | 合法 provisional candidate, formal complete |
+| Manifest negative unknown/missing/type/enum/UUID | PASS | 5 個負向 fixtures |
+| Sequence positive/negative | PASS | synthetic positive + negative |
+| Parsed artifact positive/negative | PASS | structural and base64 syntax; not byte replay |
+| Field registry / anomaly rules / expected anomalies | PASS | synthetic structural examples |
+| Disposition / lifecycle / header contract | PASS | synthetic structural examples |
+| RecoveryRecord / FailureRecord | PASS | Structural positive/negative fixtures; HMAC signing behavior and OS error capture remain implementation NOT RUN. |
+| Cross-file semantic constraints | NOT RUN | Must be implemented by future validator |
+
+## Tests NOT RUN
+
+| Test | Status |
+|---|---|
+| TSV byte fixtures: LF/CRLF/NONE/bare CR/invalid UTF-8/BOM/blank/roundtrip | NOT RUN |
+| Physical line counts and byte accounting equations against bytes | NOT RUN |
+| TSV trailing/consecutive empty columns and abnormal field counts | NOT RUN |
+| Unicode digit placeholder negative tests | NOT RUN |
+| Exact header rules on 9 upstream sources | NOT RUN (source bytes unavailable) |
+| Gate 6 repeatability / exact mapping | NOT RUN |
+| ACL seal validity; builder write denied on sealed build | NOT RUN |
+| Filesystem capability probe | NOT RUN |
+| Staging→builds same-volume no-replace rename | NOT RUN |
+| FlushFileBuffers / crash durability | NOT RUN |
+| Recovery/GC reconciliation/crash windows | NOT RUN |
+| ADS/hardlink/reparse point tests | NOT RUN |
+| Provisional lifecycle integration | NOT RUN |
+| Exit code/error_id mapping | NOT RUN |
+| parsed_current initial/concurrent/replace/read-side integrity | NOT RUN |
+| Publish allowlist | NOT RUN |
+| Public history scan and CI/pre-push checks | NOT RUN |
+| Branch protection/rulesets/CODEOWNERS | NOT RUN |
+| Source anchoring/license/rights clearance | NOT RUN |
+
+P0 remain OPEN. Do not publish source or parse outputs. No test is inferred PASS from prose.

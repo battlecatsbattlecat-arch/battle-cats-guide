@@ -1,0 +1,1 @@
+{"schema_version":7,"source_id":"cat","path":"source/cat.tsv","header_policy":"required","evidence_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","expected_columns":["a"]}

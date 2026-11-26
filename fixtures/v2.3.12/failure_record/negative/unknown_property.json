@@ -1,0 +1,1 @@
+{"schema_version":"1.0","build_id":"build-fixture","build_sequence":1,"allocation_uuid":"123e4567-e89b-42d3-a456-426614174001","failed_at_utc":"2026-11-26T00:00:00Z","stage":"parse","error_id":"PARSE_FAILED","diagnostics":[],"staging_path":"builds/.staging/build-fixture","diagnostic_path":"diagnostics/failed/build-fixture","original_os_error":null,"unknown_fixture_property":true}

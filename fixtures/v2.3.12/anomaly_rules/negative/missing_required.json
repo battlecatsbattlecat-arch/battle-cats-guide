@@ -1,0 +1,1 @@
+{"source_manifest_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","rules":[{"rule_id":"bad_row","severity":"blocking","blocking":true,"description":"synthetic fixture","row_class":"rejected","value_type":"unknown"}]}
