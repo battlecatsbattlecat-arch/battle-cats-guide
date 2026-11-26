@@ -9,7 +9,7 @@
 2. 新增 ACL/seal 身分權限、DACL/owner/WRITE_DAC、inheritance、ADS/hardlink/reparse、inventory 物件集合及失敗復原模型。
 3. Sealed event 加入精確落盤 manifest bytes SHA-256 及 inventory SHA-256；定義 reader 對 event/manifest/inventory 驗證。
 4. 選擇 provisional build 可封存為 private diagnostics、永不可發布的終態，並對齊 lifecycle/gate/receipt/recovery/GC。
-5. 新增 parsed row/artifact schema contract、source/header contract、field registry/anomaly rules/expected anomalies/disposition 等 schema 索引與 fixtures。
+5. 新增 parsed row/artifact、source/header、allocation ledger、parsed_current pointer、seal inventory、failure/recovery、field registry/anomaly rules/expected anomalies/disposition 等 14 個 Draft 2020-12 schema 與 fixtures。
 6. 明定目前來源 TSV 不在工作樹；9 個上游 header policy 未有 bytes evidence 前均為 unknown，阻止 formal build，不假稱有標頭。
 7. 補齊 line/BOM/payload/EOL 對帳式、TSV empty token 保留、header 主因、error code、CreateDirectoryW 183/3 與 retry 邊界、reconciliation matrix。
 8. 明確保留 v2.3.10 八項安全規則，另定義 build_sequence ledger、恢復、capability probe 等要求。
@@ -24,7 +24,7 @@ node scripts/generate_v2_3_12_fixtures.cjs
 node scripts/validate_v2_3_12_schemas.cjs
 ```
 
-首輪依 Claude 指摘重現 v2.3.11 schema 問題：合法 candidate 與 complete 都被 `unevaluatedProperties:false` 放在 allOf child 的 schema 拒絕。可重現命令為 `node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md`。修正版最終 58 fixtures（兩個正向 manifest、六個 manifest 負向、其餘 schema 正負向）由 Ajv 實跑，0 mismatch、exit 0；結果記錄於 `PIPELINE_VALIDATION_STATUS.md`。這只是 schema 對 fixtures 驗證，不是 Parser/ACL/Windows 發布實作測試。
+首輪依 Claude 指摘重現 v2.3.11 schema 問題：合法 candidate 與 complete 都被 `unevaluatedProperties:false` 放在 allOf child 的 schema 拒絕。可重現命令為 `node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md`。修正版最終 73 fixtures（兩個正向 manifest、六個 manifest 負向、其餘 schema 正負向）由 Ajv 實跑，0 mismatch、exit 0；結果記錄於 `PIPELINE_VALIDATION_STATUS.md`。這只是 schema 對 fixtures 驗證，不是 Parser/ACL/Windows 發布實作測試。
 
 ## 修訂前後
 

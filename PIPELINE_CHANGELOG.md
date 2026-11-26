@@ -24,7 +24,7 @@
 | **v2.3.9** | 2026-11-26 |改用 Win32 `CreateDirectoryW` 排他建立 `attempt` 目錄、統一 `attempt_id` 與目錄名稱（`attempt-<seq>-<uuid_v4>`）、修正 `rights_class` 為 6 種、修正 ASCII `strict_int` 正則 `^(0\|-?[1-9][0-9]*)$`、新增 `builds/<build_id>/` + `parsed_current.json` 原子發布與明定 `source/checksums.json` 實體位置。 |
 | **v2.3.10** | 2026-11-26 | 草案修訂：定義 build candidate/complete 與 indicator published 狀態、build sequence/並行發布/原子替換/讀取驗證、raw payload Base64/TSV roundtrip、CreateDirectoryW 父目錄競爭、統計邊界、ASCII placeholder regex、多重診斷與 exit code。詳見 `PIPELINE_CHANGELOG_v2.3.10.md`；待獨立審查，未凍結。 |
 | **v2.3.11** | 2026-11-26 | 回應 Claude v2.3.10 獨立審查：完善物理行/byte 對帳、sequence allocation ledger 與 crash recovery、build lifecycle/failure/seal/receipt、每 build anomalies、七類 JSON Schema、exit code 邊界、CreateDirectoryW 父層錯誤與競爭、pointer 人工復原及完整 publication gates。逐項對照見 `PIPELINE_CODEX_REVIEW.md`；修訂摘要見 `PIPELINE_CHANGELOG_v2.3.11.md`。草案待複審，未凍結；P0 未解除，實作與功能測試 NOT RUN。 |
-| **v2.3.12** | 2026-11-26 | 回應 Claude v2.3.11 第二輪：修正 manifest Draft 2020-12 schema composition，新增 Ajv 8.20.0 + 58 synthetic fixtures 真實驗證；補 ACL sealed inventory/event hashes、provisional private terminal、parsed/config/header schemas、byte/TSV/line 契約、GC/recovery matrix 與保留安全規則。對照見 `PIPELINE_CODEX_REVIEW.md`；詳細修訂見 `PIPELINE_CHANGELOG_v2.3.12.md`。待獨立複審、未凍結；P0 保留，Parser/平台測試 NOT RUN。 |
+| **v2.3.12** | 2026-11-26 | 回應 Claude v2.3.11 第二輪：修正 manifest Draft 2020-12 schema composition，新增 Ajv 8.20.0 + 73 synthetic fixtures 真實驗證；補 ACL sealed inventory/event hashes、provisional private terminal、parsed/config/header/allocation/pointer/inventory/recovery schemas、byte/TSV/line 契約、GC/recovery matrix 與保留安全規則。對照見 `PIPELINE_CODEX_REVIEW.md`；詳細修訂見 `PIPELINE_CHANGELOG_v2.3.12.md`。待獨立複審、未凍結；P0 保留，Parser/平台測試 NOT RUN。 |
 
 ---
 

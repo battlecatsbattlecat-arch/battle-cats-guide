@@ -1,0 +1,1 @@
+{"schema_version":"1.0","build_id":"build-00000000000000000001-123e4567-e89b-42d3-a456-426614174001","entries":[{"path":"parsed/cat.jsonl","object_kind":"file","byte_length":1,"sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","file_id":"synthetic-1","hardlink_count":1,"streams":["::$DATA"],"reparse_point":false}],"unknown_fixture_property":true}

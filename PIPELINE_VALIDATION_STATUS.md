@@ -17,9 +17,9 @@
 | 測試 | 狀態 | 結果 |
 |---|---|---|
 | N1 原 v2.3.11 schema positive candidate/complete | FAIL (reproduction) | Ajv 8.20.0 以 `#/allOf/1/unevaluatedProperties` 拒絕兩份合法形狀 manifest。可重現：`node scripts/repro_v2_3_11_manifest_schema.cjs PIPELINE_SPEC_v2.3.11.md`；該命令 exit 0 表示重現腳本完成，fixture `valid:false` 是被測舊 schema 的失敗結果。 |
-| v2.3.12 schema fixture harness | PASS | Ajv 8.20.0 `ajv/dist/2020`; ajv-formats 3.0.1; Node.js v24.22.3。命令見下。58 fixtures、0 failures、exit 0。 |
+| v2.3.12 schema fixture harness | PASS | Ajv 8.20.0 `ajv/dist/2020`; ajv-formats 3.0.1; Node.js v24.22.3。命令見下。73 fixtures、0 failures、exit 0。 |
 | `$schema/$ref/allOf/unevaluatedProperties` semantic check | PASS (schema compile via Ajv) | `allOf` common refs compile; positive candidate/complete accepted; unknown root property rejected. |
-| Full JSON schema files | PASS | All 11 Draft 2020-12 schemas compiled by Ajv harness and exercised by positive/negative synthetic fixtures. |
+| Full JSON schema files | PASS | All 14 Draft 2020-12 schemas compiled by Ajv harness and exercised by positive/negative synthetic fixtures. |
 
 Reproduce in PowerShell, with Ajv runtime in temporary directory (not part of repository):
 
@@ -37,8 +37,9 @@ Expected test meaning is fixture validity agreement; this does not assert busine
 | Suite | 狀態 | Scope |
 |---|---|---|
 | Manifest positive candidate + complete | PASS | 合法 provisional candidate, formal complete |
-| Manifest negative unknown/missing/type/enum/UUID | PASS | 5 個負向 fixtures |
+| Manifest negative unknown/missing/type/enum/UUID | PASS | 6 個負向 fixtures (candidate and complete unknown-property cases included) |
 | Sequence positive/negative | PASS | synthetic positive + negative |
+| Allocation ledger / parsed_current / seal inventory | PASS | Synthetic positive/negative fixtures; cross-document sequence/hash/path semantic checks remain NOT RUN. |
 | Parsed artifact positive/negative | PASS | structural and base64 syntax; not byte replay |
 | Field registry / anomaly rules / expected anomalies | PASS | synthetic structural examples |
 | Disposition / lifecycle / header contract | PASS | synthetic structural examples |

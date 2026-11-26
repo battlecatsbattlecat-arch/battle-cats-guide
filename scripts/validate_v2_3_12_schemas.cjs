@@ -18,6 +18,9 @@ const specs = [
   ['source_header_contract', 'source_header_contract.schema.json']
   ,['failure_record','failure_record.schema.json']
   ,['recovery_record','recovery_record.schema.json']
+  ,['allocation_record','allocation_record.schema.json']
+  ,['parsed_current','parsed_current.schema.json']
+  ,['seal_inventory','seal_inventory.schema.json']
 ];
 let count=0, failures=0;
 for (const [name,file] of specs) {

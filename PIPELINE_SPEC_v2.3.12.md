@@ -318,6 +318,9 @@ Every build intended for parsed_current must pass all gates:
 |---|---|---|
 | Manifest | staging/builds `<id>/build_manifest.json` | `build_manifest.schema.json` |
 | Sequence | `<vault>/build_sequence.json` | `build_sequence.schema.json` |
+| Allocation ledger | `<vault>/state/allocations/<20-digit-sequence>.json` | `allocation_record.schema.json` |
+| Current pointer | `<vault>/parsed_current.json` | `parsed_current.schema.json` |
+| Seal inventory | `builds/<id>/inventory.json` (canonical bytes hash anchored by event) | `seal_inventory.schema.json` |
 | Parsed row | `builds/<id>/parsed/<source_id>.jsonl` 每行一 JSON object | `parsed_artifacts.schema.json` |
 | Lifecycle event | `<vault>/state/events/<20-digit-event-seq>.<uuid>.json` | `lifecycle_event.schema.json` |
 | Field registry | 私有 `<vault>/config/field_registry.json` | `field_registry.schema.json` |

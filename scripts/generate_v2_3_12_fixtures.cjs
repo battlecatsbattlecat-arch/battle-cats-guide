@@ -14,7 +14,10 @@ const header={schema_version:'1.0',source_id:'cat',path:'source/cat.tsv',header_
 const sequence={schema_version:'1.0',next_sequence:2,updated_at_utc:'2026-11-26T00:00:00Z',last_allocation_sha256:sha};
 const failure={schema_version:'1.0',build_id:'build-fixture',build_sequence:1,allocation_uuid:uuid,failed_at_utc:'2026-11-26T00:00:00Z',stage:'parse',error_id:'PARSE_FAILED',diagnostics:[],staging_path:'builds/.staging/build-fixture',diagnostic_path:'diagnostics/failed/build-fixture',original_os_error:null};
 const recovery={schema_version:'1.0',recovery_uuid:uuid,recovery_type:'parsed_current',created_at_utc:'2026-11-26T00:00:00Z',operator_id:'synthetic',evidence:['synthetic evidence'],decision:'restore prior pointer',damaged_bytes_sha256:sha,preserved_bytes_path:'state/recoveries/x/corrupt.bin',missing_marker:null};
-for(const [g,o] of Object.entries({anomaly_rules:rules,field_registry:registry,expected_anomalies:expected,anomaly_disposition:disposition,parsed_artifacts:row,lifecycle_event:event,source_header_contract:header,build_sequence:sequence,failure_record:failure,recovery_record:recovery})){
+const allocation={schema_version:'1.0',event_type:'allocated',build_sequence:1,build_id:'build-00000000000000000001-123e4567-e89b-42d3-a456-426614174001',allocation_uuid:uuid,owner_uuid:uuid,created_at_utc:'2026-11-26T00:00:00Z',spec_version:'2.3.12'};
+const pointer={schema_version:'1.0',generation:1,publication_state:'published',active_build_id:allocation.build_id,parsed_path:`builds/${allocation.build_id}/parsed/`,build_manifest_sha256:sha,published_at_utc:'2026-11-26T00:00:00Z',publisher_uuid:uuid};
+const inventory={schema_version:'1.0',build_id:allocation.build_id,entries:[{path:'parsed/cat.jsonl',object_kind:'file',byte_length:1,sha256:sha,file_id:'synthetic-1',hardlink_count:1,streams:['::$DATA'],reparse_point:false}]};
+for(const [g,o] of Object.entries({anomaly_rules:rules,field_registry:registry,expected_anomalies:expected,anomaly_disposition:disposition,parsed_artifacts:row,lifecycle_event:event,source_header_contract:header,build_sequence:sequence,failure_record:failure,recovery_record:recovery,allocation_record:allocation,parsed_current:pointer,seal_inventory:inventory})){
  put(g,'positive','valid',o);negs(g,o);
  const bad={...o}; if(g==='anomaly_rules') bad.rules=[{...o.rules[0],severity:'super'}];
  if(g==='field_registry') bad.fields=o.fields.slice(0,49);
@@ -26,6 +29,9 @@ for(const [g,o] of Object.entries({anomaly_rules:rules,field_registry:registry,e
  if(g==='build_sequence') bad.next_sequence=0;
  if(g==='failure_record') bad.stage='unknown-stage';
  if(g==='recovery_record') bad.recovery_type='unknown-recovery';
+ if(g==='allocation_record') bad.event_type='building';
+ if(g==='parsed_current') bad.publication_state='candidate';
+ if(g==='seal_inventory') bad.entries[0].reparse_point=true;
  put(g,'negative','invalid_constraint',bad);
 }
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'fixtures/v2.3.12/build_manifest/positive/candidate.json'),'utf8'));
